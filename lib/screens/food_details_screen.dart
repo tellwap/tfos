@@ -23,6 +23,7 @@ class FoodDetailsScreen extends StatelessWidget {
             meal.id,
             Cart(
                 id: meal.id,
+                productId: meal.id,
                 quantity: 1,
                 title: meal.name,
                 price: meal.price,

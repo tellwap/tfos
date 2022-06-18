@@ -4,8 +4,29 @@ import 'package:tfos/providers/orders.dart';
 import 'package:tfos/widgets/no_item.dart';
 import 'package:tfos/widgets/order_item.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({Key? key}) : super(key: key);
+  static const routeName = '/orders-screen';
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      getOrder();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void getOrder() async {
+    await Provider.of<Orders>(context).getOrders();
+  }
 
   @override
   Widget build(BuildContext context) {

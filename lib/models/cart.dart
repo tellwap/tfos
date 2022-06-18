@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class Cart with ChangeNotifier {
   final int id;
+  final int productId;
   int quantity;
   final String title;
   final double price;
@@ -9,6 +10,7 @@ class Cart with ChangeNotifier {
 
   Cart({
     required this.id,
+    required this.productId,
     required this.quantity,
     required this.title,
     required this.price,

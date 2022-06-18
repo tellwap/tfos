@@ -7,11 +7,13 @@ import 'package:tfos/widgets/no_item.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
+  static const routeName = '/cart-screnn';
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Carts>(context);
     final carts = cart.items;
+    print('rebuilddd');
 
     return Scaffold(
       appBar: AppBar(
@@ -22,11 +24,17 @@ class CartScreen extends StatelessWidget {
               height: 60,
             )
           : InkWell(
-              onTap: () {
-                Provider.of<Orders>(context, listen: false)
-                    .addOrder(cart.items.values.toList(), cart.totalAmount);
+              onTap: () async {
+                final response = await Provider.of<Orders>(context,
+                        listen: false)
+                    .createOrder(cart.items.values.toList(), cart.totalAmount);
+
+                print(response.data);
                 //clear cart item
                 cart.clear();
+
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Order created successfully')));
               },
               child: Container(
                 height: 80,
@@ -36,7 +44,7 @@ class CartScreen extends StatelessWidget {
                 child: Consumer<Carts>(
                   builder: (ctx, cart, ch) => Center(
                       child: Text(
-                    'Tsh ${cart.totalAmount} Check Out',
+                    'Tsh ${cart.totalAmount} Order Now',
                     style: const TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,

@@ -23,6 +23,7 @@ class Carts with ChangeNotifier {
           productId.toString(),
           (cart) => Cart(
               id: cart.id,
+              productId: productId,
               quantity: cart.quantity + 1,
               title: cart.title,
               price: cart.price,

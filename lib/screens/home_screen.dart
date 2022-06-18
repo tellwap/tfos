@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FoodApp'),
+        title: const Text('Bakery App'),
       ),
       backgroundColor: Colors.grey[100],
       body: Column(

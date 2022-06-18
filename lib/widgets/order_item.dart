@@ -21,9 +21,42 @@ class _OrderItemState extends State<OrderItem> {
       child: Column(
         children: [
           ListTile(
-            title: Text('TZS ${widget.order.amount}'),
-            subtitle: Text(
-              DateFormat('dd MM yyyy hh:mm').format(widget.order.dateTime),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'ORDER NO: ${widget.order.id}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Text(
+                  'TZS ${widget.order.totalAmount}',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                Container(
+                    margin: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: widget.order.approved == 1
+                            ? Colors.green[100]
+                            : Colors.red[100],
+                        borderRadius: BorderRadius.circular(10)),
+                    child: widget.order.approved == 1
+                        ? const Text('Completed')
+                        : const Text('Pending'))
+              ],
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  DateFormat('dd MM yyyy hh:mm').format(
+                      DateTime.parse(widget.order.createdAt.toString())),
+                ),
+              ],
             ),
             trailing: IconButton(
               onPressed: () {
@@ -37,21 +70,22 @@ class _OrderItemState extends State<OrderItem> {
           if (_expanded)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              height: min(widget.order.products.length * 20.0 + 30, 180),
+              height: min(widget.order.orderItems!.length * 20.0 + 30, 180),
               child: ListView.builder(
-                itemCount: widget.order.products.length,
+                itemCount: widget.order.orderItems?.length,
                 itemBuilder: (context, index) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.order.products[index].title,
+                      widget.order.orderItems![index].product.name,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                        '${widget.order.products[index].quantity} X ${widget.order.products[index].price}'),
+                      '${widget.order.orderItems?[index].quantity} ${widget.order.orderItems?[index].product.unit!.name} X ${widget.order.orderItems?[index].product.price}',
+                    ),
                   ],
                 ),
               ),

@@ -15,10 +15,10 @@ class CartItem extends StatelessWidget {
         children: [
           Container(
             width: 100,
-            height: 100,
+            height: 70,
             decoration: BoxDecoration(
               color: Colors.grey,
-              borderRadius: BorderRadius.circular(30),
+              // borderRadius: BorderRadius.circular(30),
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: AssetImage(cart.image),
