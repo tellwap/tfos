@@ -14,6 +14,7 @@ import 'package:tfos/categories/views/categories_screen.dart';
 import 'package:tfos/categories/views/category_details_screen.dart';
 import 'package:tfos/categories/views/edit_category_screen.dart';
 import 'package:tfos/components/splash_screen.dart';
+import 'package:tfos/distributor_dashboard_screen.dart';
 import 'package:tfos/distributors/view_models/distributor_view_model.dart';
 import 'package:tfos/distributors/views/add_distributor_screen.dart';
 import 'package:tfos/distributors/views/distributor_details_screen.dart';
@@ -41,7 +42,9 @@ import 'package:tfos/retailers/views/retailer_details_screen.dart';
 import 'package:tfos/retailers/views/retailers_screen.dart';
 import 'package:tfos/retails_dashboard_screen.dart';
 import 'package:tfos/screens/account_screen.dart';
+import 'package:tfos/screens/assign_order_distributor_screen.dart';
 import 'package:tfos/screens/cart_screen.dart';
+import 'package:tfos/screens/distributor_orders_screen.dart';
 import 'package:tfos/screens/manufactre_orders_screen.dart';
 import 'package:tfos/screens/orders_screen.dart';
 import 'package:tfos/screens/purchase_cart_screen.dart';
@@ -72,7 +75,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Meals()),
         ChangeNotifierProvider(create: (ctx) => Carts()),
         ChangeNotifierProvider(create: (ctx) => Purchases()),
-        ChangeNotifierProvider(create: (ctx) => Orders()),
+
+        ChangeNotifierProxyProvider<Auth, Orders>(
+            create: (context) => Orders(''),
+            update: (context, auth, quizes) => Orders(auth.token)),
+        // ChangeNotifierProvider(create: (ctx) => Orders()),
         ChangeNotifierProvider(create: (ctx) => Stocks()),
         ChangeNotifierProvider(create: (ctx) => UnitViewModel()),
         ChangeNotifierProvider(create: (ctx) => CategoryViewModel()),
@@ -90,13 +97,14 @@ class MyApp extends StatelessWidget {
           ),
           home: auth.isAuth
               ? Builder(builder: (ctx) {
-                  print(auth.user?.role);
                   if (auth.user?.role == 'admin') {
                     return const AdminDashboardScreen();
                   } else if (auth.user?.role == 'retailer') {
                     return const RetailsDashboardScreen();
                   } else if (auth.user?.role == 'manufacture') {
                     return const ManufactureDashboardScreen();
+                  } else if (auth.user?.role == 'distributor') {
+                    return const DistributorDashboardScreen();
                   } else {
                     return const AdminDashboardScreen();
                   }
@@ -178,6 +186,10 @@ class MyApp extends StatelessWidget {
             PurchaseProductScreen.routeName: (ctx) =>
                 const PurchaseProductScreen(),
             PurchaseCartScreen.routeName: (ctx) => const PurchaseCartScreen(),
+            AssignOrderDistributorScreen.routeName: (ctx) =>
+                const AssignOrderDistributorScreen(),
+            DistributorOrdersScreen.routeName: (ctx) =>
+                const DistributorOrdersScreen(),
           },
         ),
       ),

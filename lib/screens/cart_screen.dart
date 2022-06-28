@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tfos/models/cart.dart';
 import 'package:tfos/providers/carts.dart';
 import 'package:tfos/providers/orders.dart';
 import 'package:tfos/widgets/cart_item.dart';
@@ -11,6 +12,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final cartt = Provider.of<Cart>(context);
     final cart = Provider.of<Carts>(context);
     final carts = cart.items;
     print('rebuilddd');
@@ -32,7 +34,7 @@ class CartScreen extends StatelessWidget {
                 print(response.data);
                 //clear cart item
                 cart.clear();
-
+                Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Order created successfully')));
               },

@@ -5,6 +5,7 @@ import 'package:tfos/units/models/unit.dart';
 class Product {
   final int id;
   final String name;
+  String? image;
   int? categoryId;
   int? unitId;
   double? price;
@@ -24,11 +25,13 @@ class Product {
       this.stock,
       required this.description,
       this.category,
+      this.image,
       this.unit});
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'],
       name: json['name'],
+      image: json['image'],
       //categoryId: json['category_id'],
       //unitId: json['unit_id'],
       price: double.parse(json['price'].toString()),

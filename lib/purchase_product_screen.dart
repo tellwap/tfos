@@ -1,5 +1,5 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:tfos/components/app_error.dart';
 import 'package:tfos/components/app_loading.dart';
 import 'package:tfos/models/purchase.dart';
@@ -7,6 +7,7 @@ import 'package:tfos/products/view_models/product_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:tfos/providers/purchases.dart';
 import 'package:tfos/screens/purchase_cart_screen.dart';
+import 'package:tfos/utils/constants.dart';
 
 class PurchaseProductScreen extends StatelessWidget {
   const PurchaseProductScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class PurchaseProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProductViewModel productViewModel = context.watch<ProductViewModel>();
-    final purchase = Provider.of<Purchases>(context, listen: false);
+    final purchase = Provider.of<Purchases>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,7 +32,11 @@ class PurchaseProductScreen extends StatelessWidget {
                 .getProducts();
           }
         },
-        child: const Icon(Icons.shopping_cart_outlined),
+        child: Badge(
+          badgeColor: Colors.amber,
+          badgeContent: Text(purchase.items.length.toString()),
+          child: const Icon(Icons.shopping_cart),
+        ),
       ),
     );
   }
@@ -56,6 +61,10 @@ class PurchaseProductScreen extends StatelessWidget {
               height: 150,
               width: 100,
               color: Colors.grey,
+              child: Image(
+                image: NetworkImage(
+                    '$baseImageURL${productViewModel.products[index].image}'),
+              ),
             ),
             title: Text(
               productViewModel.products[index].name,
@@ -84,7 +93,7 @@ class PurchaseProductScreen extends StatelessWidget {
                     productId: productViewModel.products[index].id,
                     title: productViewModel.products[index].name,
                     price: productViewModel.products[index].price as double,
-                    image: productViewModel.products[index].name),
+                    image: productViewModel.products[index].image.toString()),
               );
               ScaffoldMessenger.of(ctx)
                   .showSnackBar(const SnackBar(content: Text('Added to cart')));

@@ -5,6 +5,7 @@ import 'package:tfos/components/app_loading.dart';
 import 'package:tfos/products/view_models/product_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:tfos/products/views/product_details_screen.dart';
+import 'package:tfos/utils/constants.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({Key? key}) : super(key: key);
@@ -43,7 +44,17 @@ class ProductsScreen extends StatelessWidget {
       itemBuilder: (ctx, index) => Column(
         children: [
           ListTile(
-            leading: Text(productViewModel.products[index].id.toString()),
+            leading: Container(
+              height: 80,
+              width: 80,
+              decoration: const BoxDecoration(
+                  color: Colors.green, shape: BoxShape.rectangle),
+              child: Image(
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                    '$baseImageURL${productViewModel.products[index].image}'),
+              ),
+            ),
             title: Text(
               productViewModel.products[index].name,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

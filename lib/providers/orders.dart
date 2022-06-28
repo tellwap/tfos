@@ -10,6 +10,9 @@ import 'package:tfos/utils/constants.dart';
 class Orders with ChangeNotifier {
   var _items = [];
 
+  final _token;
+  Orders(this._token);
+
   List<Order> get items {
     return [..._items];
   }
@@ -35,10 +38,80 @@ class Orders with ChangeNotifier {
       Map<String, String> headers = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        // 'Authorization': 'Bearer $_token'
+        'Authorization': 'Bearer $_token'
       };
       final response = await http.get(
         Uri.parse(ORDERS_LIST),
+        headers: headers,
+      );
+
+      // print(response.body);
+
+      if (response.statusCode == 200) {
+        //  print(response.body);
+        final data = jsonDecode(response.body)
+            .map((order) => Order.fromJson(order))
+            .toList();
+        //print(data);
+        _items = data;
+        //update provider items
+        notifyListeners();
+      } else {
+        _apiResponse.error = somethingWentWrong;
+      }
+    } catch (e) {
+      print(e);
+      _apiResponse.error = serverError;
+    }
+
+    return _apiResponse;
+  }
+
+  Future<ApiResponse> getDistributorOrders() async {
+    ApiResponse _apiResponse = ApiResponse();
+    try {
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $_token'
+      };
+      final response = await http.get(
+        Uri.parse(ORDER_DISTRIBUTOR_LIST),
+        headers: headers,
+      );
+
+      // print(response.body);
+
+      if (response.statusCode == 200) {
+        //  print(response.body);
+        final data = jsonDecode(response.body)
+            .map((order) => Order.fromJson(order))
+            .toList();
+        //print(data);
+        _items = data;
+        //update provider items
+        notifyListeners();
+      } else {
+        _apiResponse.error = somethingWentWrong;
+      }
+    } catch (e) {
+      print(e);
+      _apiResponse.error = serverError;
+    }
+
+    return _apiResponse;
+  }
+
+  Future<ApiResponse> getRetailerOrders() async {
+    ApiResponse _apiResponse = ApiResponse();
+    try {
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $_token'
+      };
+      final response = await http.get(
+        Uri.parse(ORDER_RETAILER_LIST),
         headers: headers,
       );
 
@@ -70,7 +143,7 @@ class Orders with ChangeNotifier {
       Map<String, String> headers = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        // 'Authorization': 'Bearer $_token'
+        'Authorization': 'Bearer $_token'
       };
       final response = await http.post(
         Uri.parse(ORDERS_LIST),
@@ -116,13 +189,47 @@ class Orders with ChangeNotifier {
       Map<String, String> headers = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        // 'Authorization': 'Bearer $_token'
+        'Authorization': 'Bearer $_token'
       };
       final response = await http.put(
         Uri.parse(ORDERS_LIST + '/$orderId'),
         body: jsonEncode({
           'status': '1',
           'approved': '1',
+        }),
+        headers: headers,
+      );
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        getOrders();
+        print(response);
+        //update provider items
+        notifyListeners();
+      } else {
+        _apiResponse.error = somethingWentWrong;
+      }
+    } catch (e) {
+      print(e);
+      _apiResponse.error = serverError;
+    }
+    return _apiResponse;
+  }
+
+  Future<ApiResponse> assignOrder(int orderId, int distributorId) async {
+    ApiResponse _apiResponse = ApiResponse();
+    try {
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        // 'Authorization': 'Bearer $_token'
+      };
+      final response = await http.post(
+        Uri.parse(ORDERS_LIST + '/assign'),
+        body: jsonEncode({
+          'order_id': orderId,
+          'distributor_id': distributorId,
         }),
         headers: headers,
       );

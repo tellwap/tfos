@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tfos/categories/models/category.dart';
 import 'package:tfos/categories/view_models/category_view_model.dart';
@@ -27,22 +30,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Unit? _selectedUnit;
   Category? _selectedCategory;
   Stock? _selectedStock;
+  var _imageFile;
+
+  _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    _imageFile = image;
+  }
 
   void _createNewProduct(BuildContext context) async {
+    if (_imageFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select image for product')));
+      return;
+    }
     if (!_formKey.currentState!.validate()) {
       return;
     }
     await Provider.of<ProductViewModel>(context, listen: false).createProducts(
-      Product(
-          id: 1,
-          name: _textEditingNameController.text,
-          categoryId: _selectedCategory?.id,
-          unitId: _selectedUnit?.id,
-          price: double.parse(_textEditingPriceController.text),
-          quantity: int.parse(_textEditingQuantityController.text),
-          stock: _selectedStock?.id,
-          description: _textEditingDetailsController.text),
-    );
+        Product(
+            id: 1,
+            name: _textEditingNameController.text,
+            categoryId: _selectedCategory?.id,
+            unitId: _selectedUnit?.id,
+            price: double.parse(_textEditingPriceController.text),
+            quantity: int.parse(_textEditingQuantityController.text),
+            stock: _selectedStock?.id,
+            description: _textEditingDetailsController.text),
+        File(_imageFile.path));
     ProductViewModel productViewModel =
         Provider.of<ProductViewModel>(context, listen: false);
 
@@ -76,6 +92,32 @@ class _AddProductScreenState extends State<AddProductScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  InkWell(
+                    onTap: _pickImage,
+                    child: _imageFile == null
+                        ? Container(
+                            height: 150,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black38)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(Icons.add_a_photo),
+                                Text('Select image')
+                              ],
+                            ),
+                          )
+                        : SizedBox(
+                            height: 150,
+                            width: double.infinity,
+                            child: Image(
+                                fit: BoxFit.cover,
+                                image: FileImage(
+                                  File(_imageFile.path),
+                                )),
+                          ),
+                  ),
                   TextFormField(
                     controller: _textEditingNameController,
                     decoration:

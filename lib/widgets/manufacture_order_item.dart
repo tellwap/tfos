@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tfos/models/order.dart';
 import 'package:tfos/providers/orders.dart';
+import 'package:tfos/screens/assign_order_distributor_screen.dart';
 
 class ManufactureOrderItem extends StatefulWidget {
   final Order order;
@@ -23,6 +24,11 @@ class _ManufactureOrderItemState extends State<ManufactureOrderItem> {
       child: Column(
         children: [
           ListTile(
+            onTap: () {
+              Navigator.pushNamed(
+                  context, AssignOrderDistributorScreen.routeName,
+                  arguments: widget.order.id);
+            },
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,7 +55,51 @@ class _ManufactureOrderItemState extends State<ManufactureOrderItem> {
                               .updateOrder(widget.order.id);
                           print(widget.order.id);
                         },
-                        child: const Text('Confirm'))
+                        child: const Text('Confirm')),
+                Container(
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('ORDER TO: '),
+                            Text(
+                              widget.order.retailer!.name,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('PHONE NUMBER: '),
+                            Text(
+                              widget.order.retailer!.phoneNumber,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('ADDRESS: '),
+                            Expanded(
+                              child: Text(
+                                widget.order.retailer!.address,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Divider()
+                      ],
+                    ))
               ],
             ),
             subtitle: Column(

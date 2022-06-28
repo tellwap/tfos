@@ -33,7 +33,7 @@ class PurchaseCartScreen extends StatelessWidget {
                 //clear cart item
                 //  print(cart.items.values.toList());
                 cart.clear();
-
+                Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Stock updated successfully')));
               },

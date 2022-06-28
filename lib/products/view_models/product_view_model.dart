@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:tfos/products/models/api_status.dart';
 import 'package:tfos/products/models/product.dart';
@@ -54,11 +56,12 @@ class ProductViewModel extends ChangeNotifier {
     setLoading(false);
   }
 
-  createProducts(Product product) async {
+  createProducts(Product product, File imageFile) async {
     setLoading(true);
-    var response = await ProductServices.createProduct(product);
+    var response = await ProductServices.createProduct(product, imageFile);
     if (response is Success) {
-      addProducts(response.response as Product);
+      getProducts();
+      //addProducts(response.response as Product);
     }
     if (response is Failure) {
       final productError = ProductError(

@@ -25,7 +25,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   void getOrder() async {
-    await Provider.of<Orders>(context).getOrders();
+    await Provider.of<Orders>(context).getRetailerOrders();
   }
 
   @override
@@ -33,7 +33,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final orders = Provider.of<Orders>(context).items;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your orders'),
+        title: const Text('My orders'),
       ),
       body: Builder(builder: (context) {
         if (orders.isEmpty) {

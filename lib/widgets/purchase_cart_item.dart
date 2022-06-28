@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tfos/models/purchase.dart';
+import 'package:tfos/utils/constants.dart';
 
 class PurchaseCartItem extends StatelessWidget {
   const PurchaseCartItem({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class PurchaseCartItem extends StatelessWidget {
               // borderRadius: BorderRadius.circular(30),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage(cart.image),
+                image: NetworkImage('$baseImageURL${cart.image}'),
               ),
             ),
           ),
